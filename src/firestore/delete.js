@@ -300,7 +300,7 @@ FirestoreDelete.prototype._recursiveBatchDelete = function() {
           lastDocName = docs[docs.length - 1].name;
         })
         .catch(function(e) {
-          logger.debug("Failed to fetch page after " + lastDocName, e);
+          console.error("Failed to fetch page after " + lastDocName, e);
           pageIncoming = false;
         });
     }
@@ -330,12 +330,12 @@ FirestoreDelete.prototype._recursiveBatchDelete = function() {
       .catch(function(e) {
         // For server errors, retry if the document has not yet been retried.
         if (e.status >= 500 && e.status < 600) {
-          logger.debug("Server error deleting doc batch", e);
+          console.error("Server error deleting doc batch", e);
 
           // Retry each doc up to one time
           toDelete.forEach(function(doc) {
             if (retried[doc.name]) {
-              logger.debug("Failed to delete doc " + doc.name + " multiple times.");
+              console.debug("Failed to delete doc " + doc.name + " multiple times.");
               failures.push(doc.name);
             } else {
               retried[doc.name] = true;
@@ -343,7 +343,7 @@ FirestoreDelete.prototype._recursiveBatchDelete = function() {
             }
           });
         } else {
-          logger.debug("Fatal error deleting docs ", e);
+          console.error("Fatal error deleting docs ", e);
           failures = failures.concat(toDelete);
         }
 
