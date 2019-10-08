@@ -302,6 +302,7 @@ FirestoreDelete.prototype._recursiveBatchDelete = function() {
         .catch(function(e) {
           console.error("Failed to fetch page after " + lastDocName, e);
           pageIncoming = false;
+          throw e;
         });
     }
 
