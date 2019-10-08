@@ -80,6 +80,7 @@ export async function deleteDocuments(project: string, docs: any[]): Promise<num
       const b = await deleteDocuments(project, docs.slice(docs.length / 2));
       return a + b;
     }
+    console.log("Request: ", url, body);
     throw err;
   }
 }

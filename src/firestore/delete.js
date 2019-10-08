@@ -258,8 +258,8 @@ FirestoreDelete.prototype._recursiveBatchDelete = function() {
   var self = this;
 
   // Tunable deletion parameters
-  var readBatchSize = 7500;
-  var deleteBatchSize = 250;
+  var readBatchSize = 2500;
+  var deleteBatchSize = 100;
   var maxPendingDeletes = 15;
   var maxQueueSize = deleteBatchSize * maxPendingDeletes * 2;
 
@@ -272,6 +272,7 @@ FirestoreDelete.prototype._recursiveBatchDelete = function() {
 
   var failures = [];
   var retried = {};
+  var lastError = null;
 
   var queueLoop = function() {
     if (queue.length == 0 && numPendingDeletes == 0 && !pagesRemaining) {
@@ -331,13 +332,8 @@ FirestoreDelete.prototype._recursiveBatchDelete = function() {
       .catch(function(e) {
         // For server errors, retry if the document has not yet been retried.
         if (e.status >= 500 && e.status < 600) {
-          console.error("Server error deleting doc batch", e);
-          try {
-            console.error(e.context.response.req);
-            console.error(e.context.response.toJSON());
-          } catch (e) {
-            console.log("Error logging error", e);
-          }
+          console.warning("Server error deleting doc batch", e);
+          console.warning("Response:", e.context.response.toJSON());
 
           // Retry each doc up to one time
           toDelete.forEach(function(doc) {
@@ -352,6 +348,7 @@ FirestoreDelete.prototype._recursiveBatchDelete = function() {
         } else {
           console.error("Fatal error deleting docs ", e);
           failures = failures.concat(toDelete);
+          lastError = e;
         }
 
         numPendingDeletes--;
@@ -368,6 +365,10 @@ FirestoreDelete.prototype._recursiveBatchDelete = function() {
         if (failures.length == 0) {
           resolve();
         } else {
+          var error = Error("Failed to delete documents");
+          error.lastError = lastError;
+          error.failures = failures;
+          throw error;
           reject("Failed to delete documents " + failures);
         }
       }
