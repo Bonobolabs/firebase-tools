@@ -1,6 +1,6 @@
 {
-  "name": "firebase-tools",
-  "version": "7.4.0",
+  "name": "@bonobolabs/firebase-tools",
+  "version": "7.4.3",
   "description": "Command-Line Interface for Firebase",
   "main": "./lib/index.js",
   "bin": {
@@ -48,9 +48,6 @@
     "url": "https://github.com/firebase/firebase-tools/issues"
   },
   "homepage": "https://github.com/firebase/firebase-tools",
-  "publishConfig": {
-    "registry": "https://wombat-dressing-room.appspot.com"
-  },
   "nyc": {
     "require": [
       "ts-node/register"
