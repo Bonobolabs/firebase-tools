@@ -334,6 +334,7 @@ FirestoreDelete.prototype._recursiveBatchDelete = function() {
         if (e.status >= 500 && e.status < 600) {
           console.warn("Server error deleting doc batch", e);
           if (e.context) console.warn("Response:", e.context.response.toJSON());
+          lastError = e;
 
           // Retry each doc up to one time
           toDelete.forEach(function(doc) {

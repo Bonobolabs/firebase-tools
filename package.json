@@ -1,6 +1,6 @@
 {
   "name": "@bonobolabs/firebase-tools",
-  "version": "7.4.8",
+  "version": "7.4.9",
   "description": "Command-Line Interface for Firebase",
   "main": "./lib/index.js",
   "bin": {
