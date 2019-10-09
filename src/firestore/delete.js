@@ -258,9 +258,9 @@ FirestoreDelete.prototype._recursiveBatchDelete = function() {
   var self = this;
 
   // Tunable deletion parameters
-  var readBatchSize = 2500;
-  var deleteBatchSize = 100;
-  var maxPendingDeletes = 15;
+  var readBatchSize = 1000;
+  var deleteBatchSize = 50;
+  var maxPendingDeletes = 10;
   var maxQueueSize = deleteBatchSize * maxPendingDeletes * 2;
 
   // All temporary variables for the deletion queue.
